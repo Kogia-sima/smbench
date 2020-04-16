@@ -1,0 +1,19 @@
+[package]
+name = "smbench"
+version = "0.1.0"
+authors = ["Kogia-sima <orcinus4627@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+argparse = { version = "0.2.2", optional = true }
+platforms = { version = "0.2.1", optional = true }
+order-stat = "0.1.3"
+
+[dependencies.regex]
+version = "1.3.6"
+default-features = false
+features = ["std", "unicode-perl"]
+
+[features]
+default = ["argparse", "sysinfo"]
+sysinfo = ["platforms"]
