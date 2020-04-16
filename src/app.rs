@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use regex::Regex;
 
 use crate::bench::Bencher;
 use crate::common::{BenchmarkGroup, BenchmarkInfo};
@@ -37,12 +38,16 @@ impl App {
     }
 
     pub fn bench_group(&mut self, group: &BenchmarkGroup) {
+        let reg = Regex::new(&self.config.filter).unwrap();
+
         self.reporters
             .iter()
             .for_each(|r| r.on_group_init(group, &self.reporter_options));
 
         for benchmark in group.benchmarks() {
-            self.bench_single(benchmark);
+            if reg.is_match(benchmark.name()) {
+                self.bench_single(benchmark);
+            }
         }
 
         self.reporters
