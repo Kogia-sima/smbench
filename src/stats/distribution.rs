@@ -75,3 +75,22 @@ impl Distribution for Normal {
         self.mu + self.sigma * z
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use assert_float_eq::*;
+
+    #[test]
+    fn normal_distribution() {
+        let normal = Normal::new(0.0, 1.0);
+        assert_float_absolute_eq!(normal.cdf(0.0), 0.5);
+        assert_float_absolute_eq!(normal.cdf(1.6448536269514724), 0.95);
+        assert_float_absolute_eq!(normal.cdf(1.959963984540054), 0.975);
+        assert_float_absolute_eq!(normal.cdf(2.5758293035489004), 0.995);
+        assert_float_absolute_eq!(normal.icdf(0.5), 0.0);
+        assert_float_absolute_eq!(normal.icdf(0.95), 1.6448536269514724);
+        assert_float_absolute_eq!(normal.icdf(0.975), 1.959963984540054);
+        assert_float_absolute_eq!(normal.icdf(0.995), 2.5758293035489004);
+    }
+}

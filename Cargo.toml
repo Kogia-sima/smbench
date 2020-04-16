@@ -17,3 +17,6 @@ features = ["std", "unicode-perl"]
 [features]
 default = ["argparse", "sysinfo"]
 sysinfo = ["platforms"]
+
+[dev-dependencies]
+assert_float_eq = "1.1.3"
