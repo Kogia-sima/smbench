@@ -4,6 +4,85 @@
 
 lightweight benchmark framework for Rust
 
+## Features
+
+- Very small overhead
+- Estimate memory usage
+- Lightweight (does not depend on a heavy crate)
+- Highly extensive and customizable
+
+## Usage
+
+#### 1. Add smbench in your Cargo.toml
+
+```toml
+[dev-dependencies]
+smbench = "0.1.0"
+```
+
+#### 2. Add source code for benchmark in `benches/` directory.
+
+```rust
+// benches/example.rs
+
+use smbench::*;
+
+#[inline]
+fn fibonacci(n: u64) -> u64 {
+    let mut a = 0;
+    let mut b = 1;
+
+    match n {
+        0 => b,
+        _ => {
+            for _ in 0..n {
+                let c = a + b;
+                a = b;
+                b = c;
+            }
+            b
+        }
+    }
+}
+
+fn fibonacci_20(b: &mut Bencher) {
+    b.iter(|| fibonacci(black_box(20)));
+}
+
+fn heap_allocation(b: &mut Bencher) {
+    b.iter(|| Vec::<u32>::with_capacity(10));
+}
+
+// Define global allocator to trace memory allocation
+smbench_trace_memory!();
+
+smbench_group!(benches, fibonacci_20, heap_allocation);
+smbench_main!(benches);
+```
+
+#### 3. Setup your `Cargo.toml` such that cargo is able to execute the benchmark
+
+```toml
+[[bench]]
+name = "example"
+harness = false
+```
+
+#### 4. Run benchmark from console
+
+```console
+$ cargo bench -- --benchmem
+    Finished release [optimized] target(s) in 0.02s
+     Running `target/release/deps/example-01fb31feacddfce1 --benchmem`
+OS Type: linux
+CPU Architecture: x86_64
+CPU Model Name: Intel(R) Core(TM) i5-8265U CPU @ 1.60GHz
+SMBench Version: 0.1.0
+
+fibonacci_20:    9.8979 ns [9.8837 ns, 9.9121 ns]    0 B (0 allocs)
+heap_allocation: 32.763 ns [32.711 ns, 32.816 ns]   40 B (1 allocs)
+```
+
 ## Run tests
 
 ```sh
