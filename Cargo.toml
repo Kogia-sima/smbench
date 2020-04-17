@@ -2,6 +2,12 @@
 name = "smbench"
 version = "0.1.0"
 authors = ["Kogia-sima <orcinus4627@gmail.com>"]
+license = "MIT"
+description = "Measure speed and memory usage of your program"
+homepage = "https://github.com/Kogia-sima/smbench"
+repository = "https://github.com/Kogia-sima/smbench"
+readme = "README.md"
+keywords = ["bench", "benchmark", "memory", "statistics"]
 edition = "2018"
 
 [dependencies]
