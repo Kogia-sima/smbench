@@ -51,7 +51,7 @@ impl App {
             }
 
             #[cfg(not(feature = "regex"))]
-            if self.config.filter.contains(benchmark.name()) {
+            if self.config.filter.is_empty() || self.config.filter.contains(benchmark.name()) {
                 self.bench_single(benchmark)
             }
         }
