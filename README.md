@@ -17,7 +17,7 @@ lightweight benchmark framework for Rust
 
 ```toml
 [dev-dependencies]
-smbench = "0.1.0"
+smbench = { git = "https://github.com/Kogia-sima/smbench" }
 ```
 
 #### 2. Add source code for benchmark in `benches/` directory.
