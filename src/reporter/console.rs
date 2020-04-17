@@ -29,23 +29,32 @@ impl ConsoleReporter {
         }
 
         println!("SMBench Version: {}", env!("CARGO_PKG_VERSION"));
-        println!("");
 
         ConsoleReporter {
-            name_width_max: Cell::new(0),
+            name_width_max: Cell::new(9),
         }
     }
 }
 
 impl Reporter for ConsoleReporter {
-    fn on_group_init(&self, group: &BenchmarkGroup, _options: &ReporterOptions) {
+    fn on_group_init(&self, group: &BenchmarkGroup, options: &ReporterOptions) {
         if let Some(w) = group.benchmarks().iter().map(|b| b.name().len()).max() {
-            self.name_width_max.set(w);
+            if w > 9 {
+                self.name_width_max.set(w);
+            }
         }
+
+        println!("\n# {} ({})", group.name(), group.file());
+        println!(
+            "Benchmark{}        Time                 {:>3.0}% CI         Allocation",
+            " ".repeat(self.name_width_max.get().saturating_sub(9)),
+            options.confidence_level * 100.0
+        );
+        println!("{}", "-".repeat(self.name_width_max.get() + 55));
     }
 
     fn on_benchmark_start(&self, info: &BenchmarkInfo, _options: &ReporterOptions) {
-        print!("{}: ", info.name());
+        print!("{}   ", info.name());
         std::io::stdout().flush().unwrap();
     }
 
@@ -66,7 +75,7 @@ impl Reporter for ConsoleReporter {
         );
 
         print!(
-            "{}{} [{}, {}]",
+            "{}{}  [{}, {}]",
             " ".repeat(padding),
             fmt::time(mean),
             fmt::time(confidence_interval.0),
@@ -75,7 +84,7 @@ impl Reporter for ConsoleReporter {
 
         if let Some(memory) = summ.memory_usage.as_ref() {
             print!(
-                "{:>7} ({} allocs)",
+                "{:>8} ({} allocs)",
                 fmt::bytes(memory.alloc_size),
                 memory.alloc_counts
             );
