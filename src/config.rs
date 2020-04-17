@@ -1,5 +1,8 @@
 #[cfg(feature = "argparse")]
-use argparse::{ArgumentParser, Store, StoreTrue};
+use argparse::{
+    action::{IFlagAction, ParseResult},
+    ArgumentParser, Store, StoreTrue,
+};
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct BenchmarkConfig {
@@ -13,10 +16,18 @@ pub struct BenchmarkConfig {
 impl BenchmarkConfig {
     #[cfg(feature = "argparse")]
     pub fn from_args() -> Self {
+        struct StoreNone;
+        impl IFlagAction for StoreNone {
+            fn parse_flag(&self) -> ParseResult {
+                ParseResult::Parsed
+            }
+        }
+
         let mut config = BenchmarkConfig::default();
 
         let mut ap = ArgumentParser::new();
         ap.set_description("SMBench Executable");
+        ap.add_option(&["--bench"], StoreNone, "");
         ap.refer(&mut config.filter)
             .add_argument("filter", Store, "filter string for benchmarks");
         ap.refer(&mut config.benchmem).add_option(
