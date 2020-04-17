@@ -56,8 +56,8 @@ fn heap_allocation(b: &mut Bencher) {
 // Define global allocator to trace memory allocation
 smbench_trace_memory!();
 
-smbench_group!(benches, fibonacci_20, heap_allocation);
-smbench_main!(benches);
+smbench_group!(benchmark, fibonacci_20, heap_allocation);
+smbench_main!(benchmark);
 ```
 
 #### 3. Setup your `Cargo.toml` such that cargo is able to execute the benchmark
@@ -72,15 +72,18 @@ harness = false
 
 ```console
 $ cargo bench -- --benchmem
-    Finished release [optimized] target(s) in 0.02s
-     Running `target/release/deps/example-01fb31feacddfce1 --benchmem`
+    Finished bench [optimized] target(s) in 0.02s
+     Running target/release/deps/example-a698a4f124b5c06c
 OS Type: linux
 CPU Architecture: x86_64
 CPU Model Name: Intel(R) Core(TM) i5-8265U CPU @ 1.60GHz
 SMBench Version: 0.1.0
 
-fibonacci_20:    9.8979 ns [9.8837 ns, 9.9121 ns]    0 B (0 allocs)
-heap_allocation: 32.763 ns [32.711 ns, 32.816 ns]   40 B (1 allocs)
+# benchmark (benches/example.rs)
+Benchmark              Time                  95% CI         Allocation
+----------------------------------------------------------------------
+fibonacci_20      9.9045 ns  [9.8952 ns, 9.9138 ns]     0 B (0 allocs)
+heap_allocation   34.422 ns  [34.234 ns, 34.610 ns]    40 B (1 allocs)
 ```
 
 ## Run tests

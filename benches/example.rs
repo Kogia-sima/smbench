@@ -27,5 +27,5 @@ fn heap_allocation(b: &mut Bencher) {
 }
 
 smbench_trace_memory!();
-smbench_group!(benches, fibonacci_20, heap_allocation);
-smbench_main!(benches);
+smbench_group!(benchmark, fibonacci_20, heap_allocation);
+smbench_main!(benchmark);
