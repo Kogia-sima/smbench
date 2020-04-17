@@ -5,7 +5,7 @@ use super::{Reporter, ReporterOptions};
 use crate::fmt;
 use crate::stats::Distribution;
 use crate::summary;
-use crate::{BenchmarkInfo, BenchmarkGroup, BenchmarkResult};
+use crate::{BenchmarkGroup, BenchmarkInfo, BenchmarkResult};
 
 pub struct ConsoleReporter {
     name_width_max: Cell<usize>,

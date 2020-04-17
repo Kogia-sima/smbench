@@ -1,8 +1,8 @@
 use crate::bench::Bencher;
 
+use std::fmt;
 use std::mem;
 use std::ptr;
-use std::fmt;
 
 #[derive(Clone)]
 pub struct BenchmarkInfo {
@@ -30,7 +30,7 @@ impl fmt::Debug for BenchmarkInfo {
         f.debug_struct("BenchmarkInfo")
             .field("name", &self.name)
             .finish()
-    }    
+    }
 }
 
 #[derive(Clone, Debug)]

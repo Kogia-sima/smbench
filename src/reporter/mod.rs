@@ -2,7 +2,7 @@ mod console;
 pub use console::*;
 
 use crate::bench::BenchmarkResult;
-use crate::common::{BenchmarkInfo, BenchmarkGroup};
+use crate::common::{BenchmarkGroup, BenchmarkInfo};
 use crate::config::BenchmarkConfig;
 
 #[derive(Clone, Debug, PartialEq)]

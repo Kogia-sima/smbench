@@ -3,9 +3,9 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use crate::common::black_box;
+use crate::config::BenchmarkConfig;
 use crate::error::Error;
 use crate::memory::{self, MemoryUsage};
-use crate::config::BenchmarkConfig;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct BenchmarkResult {
@@ -80,10 +80,7 @@ impl Bencher {
         elapsed_time as f64 / total_iters as f64
     }
 
-    pub(crate) fn auto_bench(
-        &mut self,
-        mut f: fn(&mut Bencher),
-    ) -> Result<BenchmarkResult, Error> {
+    pub(crate) fn auto_bench(&mut self, mut f: fn(&mut Bencher)) -> Result<BenchmarkResult, Error> {
         f = black_box(f);
 
         self.iterations = 1;
