@@ -40,7 +40,7 @@ fn get_sysctl_str(s: &[u8]) -> Option<String> {
     }
 }
 
-pub fn cpu_brand() -> Option<String> {
+pub fn cpu_model() -> Option<String> {
     get_sysctl_str(b"machdep.cpu.brand_string\0")
 }
 
