@@ -21,3 +21,7 @@ sysinfo = ["platforms"]
 
 [dev-dependencies]
 assert_float_eq = "1.1.3"
+
+[[bench]]
+name = "example"
+harness = false
