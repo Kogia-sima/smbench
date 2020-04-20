@@ -1,5 +1,7 @@
 use std::fs;
+use std::io::Read;
 use std::process::Command;
+use super::CPUInfo;
 
 /*
 fn cpufreq_path() -> Option<&'static Path> {
@@ -44,7 +46,7 @@ pub fn cpu_max_frequency() -> Option<u64> {
 }
 */
 
-pub fn cpu_model() -> Option<String> {
+fn cpu_model() -> Option<String> {
     if let Ok(content) = fs::read_to_string("/proc/cpuinfo") {
         for line in content.lines() {
             if line.starts_with("model name\t") {
@@ -66,5 +68,25 @@ pub fn cpu_model() -> Option<String> {
             }
         }
         None
+    }
+}
+
+fn intel_turbo() -> Option<bool> {
+    let mut file = fs::File::open("/sys/devices/system/cpu/intel_pstate/no_turbo").ok()?;
+    let mut buffer = [b'\0'; 8];
+    let length = file.read(&mut buffer).ok()?;
+    drop(file);
+
+    if length > 0 {
+        Some(buffer[0] == b'0')
+    } else {
+        None
+    }
+}
+
+pub(super) fn get_cpuinfo() -> CPUInfo {
+    CPUInfo {
+        cpu_model: cpu_model(),
+        intel_turbo: intel_turbo(),
     }
 }

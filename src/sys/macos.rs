@@ -1,6 +1,7 @@
 // Copyright (c) 2015 Guillaume Gomez
 
 use std::os::raw::c_char;
+use super::CPUInfo;
 
 fn get_sysctl_str(s: &[u8]) -> Option<String> {
     let mut len = 0;
@@ -40,8 +41,11 @@ fn get_sysctl_str(s: &[u8]) -> Option<String> {
     }
 }
 
-pub fn cpu_model() -> Option<String> {
-    get_sysctl_str(b"machdep.cpu.brand_string\0")
+pub(super) fn get_cpuinfo() -> CPUInfo {
+    CPUInfo {
+        cpu_model: get_sysctl_str(b"machdep.cpu.brand_string\0"),
+        intel_turbo: None,
+    }
 }
 
 mod ffi {

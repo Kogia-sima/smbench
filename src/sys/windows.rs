@@ -1,7 +1,8 @@
 // Copyright (c) 2017 Guillaume Gomez
+use super::CPUInfo;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-pub fn cpu_model() -> Option<String> {
+pub(super) fn get_cpuinfo() -> CPUInfo {
     #[cfg(target_arch = "x86")]
     use std::arch::x86::__cpuid;
     #[cfg(target_arch = "x86_64")]
@@ -16,6 +17,8 @@ pub fn cpu_model() -> Option<String> {
             v.push(*i.offset(3));
         }
     }
+
+    let mut cpuinfo = CPUInfo::default();
 
     // First, we try to get the complete name.
     let res = unsafe { __cpuid(0x80000000) };
@@ -42,15 +45,15 @@ pub fn cpu_model() -> Option<String> {
             pos += 1;
         }
         match ::std::str::from_utf8(&out[..pos]) {
-            Ok(s) if !s.is_empty() => Some(s.to_owned()),
-            _ => None,
+            Ok(s) if !s.is_empty() => cpuinfo.cpu_model = Some(s.to_owned()),
+            _ => {},
         }
-    } else {
-        None
     }
+
+    cpuinfo
 }
 
 #[cfg(all(not(target_arch = "x86_64"), not(target_arch = "x86")))]
-pub fn cpu_model() -> Option<String> {
-    None
+pub(super) fn get_cpuinfo() -> CPUInfo {
+    CPUInfo::default()
 }
