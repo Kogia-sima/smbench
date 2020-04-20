@@ -78,13 +78,14 @@ $ cargo bench -- --benchmem
 OS Type: linux
 CPU Architecture: x86_64
 CPU Model Name: Intel(R) Core(TM) i5-8265U CPU @ 1.60GHz
+Intel turbo boost technology: disabled
 SMBench Version: 0.1.0
 
 # benchmark (benches/example.rs)
 Benchmark              Time                  95% CI         Allocation
 ----------------------------------------------------------------------
-fibonacci_20      9.9045 ns  [9.8952 ns, 9.9138 ns]     0 B (0 allocs)
-heap_allocation   34.422 ns  [34.234 ns, 34.610 ns]    40 B (1 allocs)
+fibonacci_20      9.8901 ns  [9.8654 ns, 9.9147 ns]     0 B (0 allocs)
+heap_allocation   34.138 ns  [33.924 ns, 34.352 ns]    40 B (1 allocs)
 ```
 
 ## Run tests
