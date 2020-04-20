@@ -1,4 +1,5 @@
 # Welcome to smbench 👋
+[![Build Status](https://travis-ci.org/Kogia-sima/smbench.svg?branch=master)](https://travis-ci.org/Kogia-sima/smbench)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Kogia-sima/smbench/blob/master/LICENSE)
 [![Twitter: Kogia\_sima](https://img.shields.io/twitter/follow/Kogia\_sima.svg?style=social)](https://twitter.com/Kogia\_sima)
 
