@@ -26,6 +26,10 @@ impl ConsoleReporter {
             if let Some(ref model) = sysinfo.cpu_model {
                 println!("CPU Model Name: {}", model);
             }
+            if let Some(intel_turbo) = sysinfo.intel_turbo {
+                let value = if intel_turbo { "enabled" } else { "disabled" };
+                println!("Intel Turbo Boost Technology: {}", value);
+            }
         }
 
         println!("SMBench Version: {}", env!("CARGO_PKG_VERSION"));
