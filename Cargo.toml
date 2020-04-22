@@ -14,6 +14,8 @@ edition = "2018"
 argparse = { version = "0.2.2", optional = true }
 platforms = { version = "0.2.1", optional = true }
 order-stat = "0.1.3"
+serde = { version = "1.0.106", optional = true }
+serde_json = { version = "1.0.51", optional = true }
 
 [dependencies.regex]
 version = "1.3.6"
@@ -24,6 +26,7 @@ features = ["std", "unicode-perl"]
 [features]
 default = ["argparse", "regex", "sysinfo"]
 sysinfo = ["platforms"]
+json = ["serde", "serde_json"]
 
 [dev-dependencies]
 assert_float_eq = "1.1.3"
