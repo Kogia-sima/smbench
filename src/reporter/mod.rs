@@ -1,6 +1,11 @@
 mod console;
 pub use console::*;
 
+#[cfg(feature = "json")]
+mod json;
+#[cfg(feature = "json")]
+pub use json::*;
+
 use crate::bench::BenchmarkResult;
 use crate::common::{BenchmarkGroup, BenchmarkInfo};
 use crate::config::BenchmarkConfig;
@@ -44,4 +49,5 @@ pub trait Reporter {
     ) {
     }
     fn on_group_finish(&self, _group: &BenchmarkGroup, _options: &ReporterOptions) {}
+    fn on_finish(&self, _options: &ReporterOptions) {}
 }
