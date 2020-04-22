@@ -22,18 +22,18 @@ impl App {
     pub fn from_config(config: Arc<BenchmarkConfig>) -> Self {
         let bencher = Bencher::new(Arc::clone(&config));
         let reporter_options = ReporterOptions::from_config(&*config);
+        let reporters = config
+            .reporters_string
+            .split(",")
+            .map(|s| <dyn Reporter>::from_str(s))
+            .collect();
 
         Self {
             config,
             bencher,
-            reporters: vec![],
+            reporters,
             reporter_options,
         }
-    }
-
-    #[inline]
-    pub fn add_reporter<R: Reporter + 'static>(&mut self, reporter: R) {
-        self.reporters.push(Box::new(reporter))
     }
 
     pub fn bench_group(&mut self, group: &BenchmarkGroup) {
@@ -78,5 +78,13 @@ impl App {
         self.reporters
             .iter()
             .for_each(|r| r.on_benchmark_complete(info, &result, &self.reporter_options));
+    }
+
+    pub fn finish(self) {}
+}
+
+impl Drop for App {
+    fn drop(&mut self) {
+        self.reporters.iter().for_each(|r| r.on_finish(&self.reporter_options));
     }
 }

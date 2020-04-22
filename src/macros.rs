@@ -37,11 +37,12 @@ macro_rules! smbench_main {
 
             let config = Arc::new(BenchmarkConfig::from_args());
             let mut app = App::from_config(config);
-            app.add_reporter(ConsoleReporter::new());
 
             $(
                 app.bench_group(&$group());
             )*
+
+            app.finish();
         }
     };
     ($($group:path,)*) => {

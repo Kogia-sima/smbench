@@ -4,13 +4,14 @@ use argparse::{
     ArgumentParser, Store, StoreTrue,
 };
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct BenchmarkConfig {
     pub filter: String,
     pub benchmem: bool,
     pub warmup_time: f64,
     pub measurement_time: f64,
     pub confidence_level: f64,
+    pub(crate) reporters_string: String,
 }
 
 impl BenchmarkConfig {
@@ -50,6 +51,11 @@ impl BenchmarkConfig {
             Store,
             "Specify the level of confidence intervals. [default is 0.95]",
         );
+        ap.refer(&mut config.reporters_string).metavar("STR[,STR..]").add_option(
+            &["--reporters"],
+            Store,
+            "Specify reporters to use.",
+        );
 
         ap.parse_args_or_exit();
         drop(ap);
@@ -80,6 +86,7 @@ impl Default for BenchmarkConfig {
             warmup_time: 2.0,
             measurement_time: 3.0,
             confidence_level: 0.95,
+            reporters_string: "console".to_owned()
         }
     }
 }
