@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::io::Write;
 use serde::ser::{Serialize, Serializer, SerializeStruct};
 
 use super::{Reporter, ReporterOptions};
@@ -6,6 +7,7 @@ use crate::stats::Distribution;
 use crate::summary;
 use crate::{BenchmarkGroup, BenchmarkInfo, BenchmarkResult};
 use crate::memory::MemoryUsage;
+use crate::common::create_output_dir;
 
 struct BenchmarkRecords {
     groups: Vec<GroupBenchmarkRecord>
@@ -111,7 +113,11 @@ impl Reporter for JsonReporter {
     }
 
     fn on_finish(&self, _options: &ReporterOptions) {
+        let mut path = create_output_dir().expect("Failed to detect 'target_dir'");
+        path.push("benchmark.json");
+        let mut file = std::fs::File::create(&path).unwrap();
         let rendered = serde_json::to_string_pretty(&*self.data.borrow()).unwrap();
-        println!("{}", rendered);
+        write!(file, "{}", rendered).unwrap();
+        self.data.borrow_mut().groups.clear();
     }
 }
