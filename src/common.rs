@@ -3,6 +3,8 @@ use crate::bench::Bencher;
 use std::fmt;
 use std::mem;
 use std::ptr;
+use std::path::PathBuf;
+use std::process::Command;
 
 #[derive(Clone)]
 pub struct BenchmarkInfo {
@@ -72,4 +74,22 @@ pub fn black_box<T>(dummy: T) -> T {
         mem::forget(dummy);
         ret
     }
+}
+
+pub(crate) fn create_output_dir() -> Option<PathBuf> {
+    let output = Command::new("cargo")
+        .args(&["metadata", "--format-version", "1"])
+        .output()
+        .ok()?;
+
+    let stdout = unsafe { String::from_utf8_unchecked(output.stdout) };
+    let start = stdout.rfind("\"target_directory\":")? + 20;
+    let end = start + stdout[start..].find("\"")?;
+    let mut dir = PathBuf::from(&stdout[start..end]);
+    dir.push("smbench");
+
+    if !dir.exists() {
+        std::fs::create_dir(&dir).unwrap();
+    }
+    Some(dir)
 }
