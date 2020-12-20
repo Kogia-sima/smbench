@@ -3,8 +3,6 @@ use crate::bench::Bencher;
 use std::fmt;
 use std::mem;
 use std::ptr;
-use std::path::PathBuf;
-use std::process::Command;
 
 #[derive(Clone)]
 pub struct BenchmarkInfo {
@@ -76,7 +74,11 @@ pub fn black_box<T>(dummy: T) -> T {
     }
 }
 
-pub(crate) fn create_output_dir() -> Option<PathBuf> {
+#[cfg(feature = "json")]
+pub(crate) fn create_output_dir() -> Option<std::path::PathBuf> {
+    use std::path::PathBuf;
+    use std::process::Command;
+
     let output = Command::new("cargo")
         .args(&["metadata", "--format-version", "1"])
         .output()
