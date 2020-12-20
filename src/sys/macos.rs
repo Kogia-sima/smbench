@@ -44,7 +44,6 @@ fn get_sysctl_str(s: &[u8]) -> Option<String> {
 pub(super) fn get_cpuinfo() -> CPUInfo {
     CPUInfo {
         cpu_model: get_sysctl_str(b"machdep.cpu.brand_string\0"),
-        intel_turbo: None,
     }
 }
 

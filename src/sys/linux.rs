@@ -1,5 +1,4 @@
 use std::fs;
-use std::io::Read;
 use std::process::Command;
 use super::CPUInfo;
 
@@ -71,22 +70,8 @@ fn cpu_model() -> Option<String> {
     }
 }
 
-fn intel_turbo() -> Option<bool> {
-    let mut file = fs::File::open("/sys/devices/system/cpu/intel_pstate/no_turbo").ok()?;
-    let mut buffer = [b'\0'; 8];
-    let length = file.read(&mut buffer).ok()?;
-    drop(file);
-
-    if length > 0 {
-        Some(buffer[0] == b'0')
-    } else {
-        None
-    }
-}
-
 pub(super) fn get_cpuinfo() -> CPUInfo {
     CPUInfo {
         cpu_model: cpu_model(),
-        intel_turbo: intel_turbo(),
     }
 }

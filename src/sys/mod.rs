@@ -18,13 +18,11 @@ pub struct SysInfo {
     pub os: Option<platforms::target::OS>,
     pub architecture: Option<platforms::target::Arch>,
     pub cpu_model: Option<String>,
-    pub intel_turbo: Option<bool>,
 }
 
 #[derive(Default)]
 struct CPUInfo {
     cpu_model: Option<String>,
-    intel_turbo: Option<bool>,
 }
 
 pub fn get_sysinfo() -> SysInfo {
@@ -34,7 +32,6 @@ pub fn get_sysinfo() -> SysInfo {
         os: None,
         architecture: None,
         cpu_model: cpuinfo.cpu_model,
-        intel_turbo: cpuinfo.intel_turbo,
     };
 
     if let Some(platform) = platforms::guess_current() {
