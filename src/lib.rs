@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "real_blackbox", feature(test))]
+
 #[macro_use]
 mod macros;
 

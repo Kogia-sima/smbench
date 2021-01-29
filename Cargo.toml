@@ -27,6 +27,7 @@ features = ["std", "unicode-perl"]
 default = ["argparse", "regex", "sysinfo"]
 sysinfo = ["platforms"]
 json = ["serde", "serde_json"]
+real_blackbox = []
 
 [dev-dependencies]
 assert_float_eq = "1.1.3"

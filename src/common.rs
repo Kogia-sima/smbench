@@ -1,8 +1,6 @@
 use crate::bench::Bencher;
 
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 #[derive(Clone)]
 pub struct BenchmarkInfo {
@@ -66,10 +64,14 @@ impl BenchmarkGroup {
     }
 }
 
+#[cfg(feature = "real_blackbox")]
+pub use core::hint::black_box;
+
+#[cfg(not(feature = "real_blackbox"))]
 pub fn black_box<T>(dummy: T) -> T {
     unsafe {
-        let ret = ptr::read_volatile(&dummy);
-        mem::forget(dummy);
+        let ret = std::ptr::read_volatile(&dummy);
+        std::mem::forget(dummy);
         ret
     }
 }
