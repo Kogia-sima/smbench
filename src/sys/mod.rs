@@ -34,7 +34,7 @@ pub fn get_sysinfo() -> SysInfo {
         cpu_model: cpuinfo.cpu_model,
     };
 
-    if let Some(platform) = platforms::guess_current() {
+    if let Some(platform) = platforms::Platform::guess_current() {
         info.os = Some(platform.target_os);
         info.architecture = Some(platform.target_arch)
     }
