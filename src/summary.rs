@@ -1,11 +1,9 @@
-use crate::memory::MemoryUsage;
 use crate::stats::{self, Normal, Regression};
 use crate::BenchmarkResult;
 
 #[derive(Debug)]
 pub struct Summary {
     pub elapsed_time: Normal,
-    pub memory_usage: Option<MemoryUsage>,
 }
 
 pub fn summarize(result: &BenchmarkResult) -> Summary {
@@ -27,6 +25,5 @@ pub fn summarize(result: &BenchmarkResult) -> Summary {
 
     Summary {
         elapsed_time: slope,
-        memory_usage: result.memory_usage.clone(),
     }
 }

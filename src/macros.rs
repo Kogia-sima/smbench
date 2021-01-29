@@ -49,11 +49,3 @@ macro_rules! smbench_main {
         smbench_main!($($group),*);
     }
 }
-
-#[macro_export]
-macro_rules! smbench_trace_memory {
-    () => {
-        #[global_allocator]
-        static ALLOC: $crate::memory::TraceAllocator = $crate::memory::TraceAllocator;
-    };
-}

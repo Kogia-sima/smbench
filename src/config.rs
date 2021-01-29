@@ -1,13 +1,12 @@
 #[cfg(feature = "argparse")]
 use argparse::{
     action::{IFlagAction, ParseResult},
-    ArgumentParser, Store, StoreTrue,
+    ArgumentParser, Store,
 };
 
 #[derive(Debug, PartialEq)]
 pub struct BenchmarkConfig {
     pub filter: String,
-    pub benchmem: bool,
     pub warmup_time: f64,
     pub measurement_time: f64,
     pub confidence_level: f64,
@@ -31,11 +30,6 @@ impl BenchmarkConfig {
         ap.add_option(&["--bench"], StoreNone, "");
         ap.refer(&mut config.filter)
             .add_argument("filter", Store, "filter string for benchmarks");
-        ap.refer(&mut config.benchmem).add_option(
-            &["--benchmem"],
-            StoreTrue,
-            "benchmark memory usage",
-        );
         ap.refer(&mut config.warmup_time).add_option(
             &["--warm-up-time"],
             Store,
@@ -82,7 +76,6 @@ impl Default for BenchmarkConfig {
     fn default() -> Self {
         BenchmarkConfig {
             filter: "".to_owned(),
-            benchmem: false,
             warmup_time: 2.0,
             measurement_time: 3.0,
             confidence_level: 0.95,

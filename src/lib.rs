@@ -7,7 +7,6 @@ mod common;
 mod config;
 mod error;
 mod fmt;
-pub mod memory;
 mod reporter;
 mod stats;
 mod summary;

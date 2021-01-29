@@ -12,14 +12,12 @@ use crate::config::BenchmarkConfig;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct ReporterOptions {
-    pub benchmem: bool,
     pub confidence_level: f64,
 }
 
 impl ReporterOptions {
     pub fn from_config(config: &BenchmarkConfig) -> Self {
         ReporterOptions {
-            benchmem: config.benchmem,
             confidence_level: config.confidence_level,
         }
     }

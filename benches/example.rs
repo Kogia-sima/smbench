@@ -26,6 +26,5 @@ fn heap_allocation(b: &mut Bencher) {
     b.iter(|| Vec::<u32>::with_capacity(10));
 }
 
-smbench_trace_memory!();
 smbench_group!(benchmark, fibonacci_20, heap_allocation);
 smbench_main!(benchmark);

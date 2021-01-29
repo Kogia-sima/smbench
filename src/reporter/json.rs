@@ -6,7 +6,6 @@ use super::{Reporter, ReporterOptions};
 use crate::stats::Distribution;
 use crate::summary;
 use crate::{BenchmarkGroup, BenchmarkInfo, BenchmarkResult};
-use crate::memory::MemoryUsage;
 use crate::common::create_output_dir;
 
 struct BenchmarkRecords {
@@ -22,7 +21,6 @@ struct BenchmarkRecord {
     name: String,
     mean: f64,
     confidence_interval: (f64, f64),
-    memory_usage: Option<MemoryUsage>,
 }
 
 impl Serialize for BenchmarkRecords {
@@ -57,11 +55,6 @@ impl Serialize for BenchmarkRecord {
         s.serialize_field("name", &self.name)?;
         s.serialize_field("mean", &self.mean)?;
         s.serialize_field("confidence_interval", &self.confidence_interval)?;
-        if let Some(ref memory) = self.memory_usage {
-            s.serialize_field("max_heap_size", &memory.max_heap_size)?;
-            s.serialize_field("alloc_size", &memory.alloc_size)?;
-            s.serialize_field("alloc_counts", &memory.alloc_counts)?;
-        }
         s.end()
     }
 }
@@ -106,7 +99,6 @@ impl Reporter for JsonReporter {
             name: info.name().to_owned(),
             mean,
             confidence_interval,
-            memory_usage: result.memory_usage.clone()
         };
 
         self.data.borrow_mut().groups.last_mut().unwrap().benchmarks.push(new_entry);

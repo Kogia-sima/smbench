@@ -5,19 +5,16 @@ use std::time::{Duration, Instant};
 use crate::common::black_box;
 use crate::config::BenchmarkConfig;
 use crate::error::Error;
-use crate::memory::{self, MemoryUsage};
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct BenchmarkResult {
     pub measurements: Vec<(usize, f64)>,
-    pub memory_usage: Option<MemoryUsage>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Bencher {
     measure_time: bool,
     dur: Duration,
-    memory_usage: Option<MemoryUsage>,
     iterations: usize,
     config: Arc<BenchmarkConfig>,
 }
@@ -27,7 +24,6 @@ impl Bencher {
         Bencher {
             measure_time: true,
             dur: Duration::new(0, 0),
-            memory_usage: None,
             iterations: 1,
             config,
         }
@@ -38,22 +34,13 @@ impl Bencher {
     where
         F: FnMut() -> T,
     {
-        if self.measure_time {
-            let start = Instant::now();
-            let k = self.iterations;
-            for _ in 0..k {
-                black_box(inner());
-            }
-            self.dur = start.elapsed();
-        } else {
-            if self.config.benchmem && memory::benchmark_is_reliable() {
-                let mut f = || {
-                    black_box(inner());
-                };
-                self.memory_usage = Some(memory::benchmark(&mut f));
-            }
-            self.measure_time = true;
+        let start = Instant::now();
+        let k = self.iterations;
+        for _ in 0..k {
+            black_box(inner());
         }
+        self.dur = start.elapsed();
+        self.measure_time = true;
     }
 
     fn warm_up(&mut self, how_long: Duration, f: fn(&mut Bencher)) -> f64 {
@@ -80,6 +67,7 @@ impl Bencher {
         elapsed_time as f64 / total_iters as f64
     }
 
+    #[inline(never)]
     pub(crate) fn auto_bench(&mut self, mut f: fn(&mut Bencher)) -> Result<BenchmarkResult, Error> {
         f = black_box(f);
 
@@ -113,7 +101,6 @@ impl Bencher {
 
         Ok(BenchmarkResult {
             measurements,
-            memory_usage: self.memory_usage.take(),
         })
     }
 }

@@ -41,11 +41,6 @@ pub struct Bytes {
     bytes: usize,
 }
 
-#[inline]
-pub fn bytes(bytes: usize) -> Bytes {
-    Bytes { bytes }
-}
-
 impl fmt::Display for Bytes {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut bytes = self.bytes;

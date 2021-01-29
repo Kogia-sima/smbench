@@ -46,11 +46,11 @@ impl Reporter for ConsoleReporter {
 
         println!("\n# {} ({})", group.name(), group.file());
         println!(
-            "Benchmark{}        Time                 {:>3.0}% CI         Allocation",
+            "Benchmark{}        Time                 {:>3.0}% CI",
             " ".repeat(self.name_width_max.get().saturating_sub(9)),
             options.confidence_level * 100.0
         );
-        println!("{}", "-".repeat(self.name_width_max.get() + 55));
+        println!("{}", "-".repeat(self.name_width_max.get() + 36));
     }
 
     fn on_benchmark_start(&self, info: &BenchmarkInfo, _options: &ReporterOptions) {
@@ -81,14 +81,6 @@ impl Reporter for ConsoleReporter {
             fmt::time(confidence_interval.0),
             fmt::time(confidence_interval.1)
         );
-
-        if let Some(memory) = summ.memory_usage.as_ref() {
-            print!(
-                "{:>8} ({} allocs)",
-                fmt::bytes(memory.alloc_size),
-                memory.alloc_counts
-            );
-        }
 
         println!();
     }
